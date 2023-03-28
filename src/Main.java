@@ -2,31 +2,44 @@ import java.io.IOException;
 
 public class Main extends Thread {
 
-
-    static Player[] players;
     static int amountOfPlayers = 2;
     static Player firstPlayer = new Player('X');
     static Player secondPlayer = new Player('O');
-
     static Field field;
 
     public static void main(String[] args) {
-        players = new Player[amountOfPlayers - 1];
-        createPlayerArray();
+        field = new Field(createPlayerArray());
+        welcomeScreen();
 
-        field = new Field(players);
-
-
+        //start game
+        field.startGame();
     }
 
-
-    public static void createPlayerArray() {
+    //create Player Array with 2 players
+    public static Player[] createPlayerArray() {
+        Player[] players = new Player[amountOfPlayers];
         players[0] = firstPlayer;
         players[1] = secondPlayer;
+        return players;
     }
 
+    //welcome screen
+    public static void welcomeScreen() {
+        clearConsole();
+        System.out.println("Willkommen zu TicTacToe!");
+        System.out.println("Bitte geben Sie den Namen des ersten Spielers ein:");
+        firstPlayer.setName(Field.scanner.nextLine());
+        System.out.println("Bitte geben Sie den Namen des zweiten Spielers ein:");
+        secondPlayer.setName(Field.scanner.nextLine());
+        System.out.println("Spiel wird gestartet...");
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
-    public void clearConsole() {
+    public static void clearConsole() {
         try {
             if (System.getProperty("os.name").contains("Windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
